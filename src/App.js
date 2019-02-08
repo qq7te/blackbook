@@ -1,9 +1,5 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import './App.css';
-
-
-var items = ['frutta', 'verdura', 'latte di soya'];
 
 
 const Checkbox = props => (
@@ -13,7 +9,7 @@ const Checkbox = props => (
 class Item extends Component {
   render() {
     return (
-        <div class={"listitem"}>
+        <div className={"listitem"}>
           <Checkbox/>
           {this.props.value}
         </div>
@@ -22,20 +18,35 @@ class Item extends Component {
 }
 
 class Items extends Component {
-  render = () =>
-    this.props.list.map((listitem) =>
-        <Item value={listitem}/>
-    )
+  render = () => {
+    var some = this.props.list || [];
+    return  some.map((listitem) =>
+        <Item value={listitem}/>)
+    ;
+  }
 
 }
 
 class App extends Component {
-  render() {
-    return (
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      list: []
+    };
+  }
+
+
+  render = () =>
       <div className="App">
-        <Items list={items}/>
+        <Items list={this.state.list}/>
       </div>
-    );
+
+  componentDidMount() {
+    fetch('/lista.json')
+        .then(response => response.json(),
+            reason => console.log(reason))
+        .then(data => this.setState(data));
   }
 }
 
