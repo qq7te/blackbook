@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/blackbook.iml" filepath="$PROJECT_DIR$/blackbook.iml" />
+      <module fileurl="file://$PROJECT_DIR$/listerine/listerine.iml" filepath="$PROJECT_DIR$/listerine/listerine.iml" />
     </modules>
   </component>
 </project>
