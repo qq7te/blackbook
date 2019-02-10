@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import GuestBook from './ListEnterer';
 
 
 const Checkbox = props => (
@@ -11,7 +12,7 @@ class Item extends Component {
     return (
         <div className={"listitem"}>
           <Checkbox/>
-          {this.props.value}
+          {this.props.value.name}
         </div>
     );
   }
@@ -39,14 +40,19 @@ class App extends Component {
 
   render = () =>
       <div className="App">
+          <GuestBook/>
         <Items list={this.state.list}/>
       </div>
 
   componentDidMount() {
-    fetch('/lista.json')
+    fetch('http://localhost:3000/items/api/items')
         .then(response => response.json(),
             reason => console.log(reason))
-        .then(data => this.setState(data));
+        .then(data => this.setState({list: data}))
+        .catch(e => {
+    console.log(e);
+    return e;
+  });
   }
 }
 

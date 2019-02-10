@@ -1,3 +1,6 @@
-{
-  "list" : ["frutta", "verdura", "altro", "whoa"]
-}
+
+[
+  {"_id":"5c5f9dc87160d46e0b098ee9",
+    "name":"verdura",
+    "status":"manca"}
+]

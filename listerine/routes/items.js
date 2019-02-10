@@ -13,11 +13,16 @@ router.get('/api/items', function(req, res) {
 
 
 router.post('/api/items', function(req, res) {
-  mongooseStuff.ItemsList.create({
-    guestSignature: req.body.name,
-    message: req.body.status,
-  }).then(signature => {
+  let oggetto = {
+    name: req.body.name,
+    status: req.body.status,
+  };
+
+  mongooseStuff.ItemsList.create(oggetto).then(signature => {
     res.json(signature)
+  })
+      .catch(err => {
+        console.log(err);
   });
 });
 
