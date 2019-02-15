@@ -1,63 +1,15 @@
 import React, { Component } from 'react';
 import './App.css';
 import GuestBook from './ListEnterer';
-//
-// class model {
-//
-//   constructor(data)
-//   {
-//     this.data = data;
-//   }
-//
-// }
 
 
 class Checkbox extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     checked: this.props.checked
-  //   };
-  //   this.handleCheckbox = this.handleCheckbox.bind(this);
-  // }
+
   render = () => (
       <input type="checkbox" onClick={this.props.statusUpdater} checked={this.props.checked} />
   );
 
-  // handleCheckbox = () => {
-  //   console.log("clicked. was: " + this.state.checked);
-  //   this.setState(state => ({checked: !state.checked}));
-  //   // console.log("clicked. now: " + this.state.checked);
-  // };
-
 }
-//
-// class Item extends Component {
-//
-//   statusUpdater = () => {
-//     this.setState((state) => ({status: !state.status}))
-//   };
-//
-//   render() {
-//     return (
-//         <div className={"listitem"}>
-//           <Checkbox checked={this.props.item.status === "abbiamo"}
-//           statusUpdater={this.statusUpdater}/>
-//           {this.props.item.name}
-//         </div>
-//     );
-//   }
-// }
-//
-// class Items extends Component {
-//   render = () => {
-//     var some = this.props.list || [];
-//     return  some.map((listitem) =>
-//         <Item item={listitem}/>)
-//     ;
-//   }
-//
-// }
 
 class App extends Component {
 
@@ -97,7 +49,7 @@ class App extends Component {
                 <div className={"listitem"}>
                   <Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
-                  {listitem.name}
+                  <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span>
                 </div>)
           }
         </div>
