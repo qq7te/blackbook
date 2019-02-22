@@ -18,6 +18,7 @@ class App extends Component {
     this.state = {
       model: []
     };
+    this.nodehostname = 'http://localhost:3000';
   }
 
 
@@ -30,6 +31,14 @@ class App extends Component {
                   return {_id: item._id, name: item.name, status: !item.status};
                 return item;
               });
+          const url = this.nodehostname + "/items/api/items/" + id;
+          const [newitem] = newmodel.filter(item=> item._id === id);
+          fetch(url, {
+            headers: {"content-type" : "application/json; charset=UTF-8"},
+            body: JSON.stringify(newitem),
+            method: "PUT"
+          }).then(res => console.log(res))
+              .catch(error => console.log(error));
 
           return {model: newmodel};
         }
@@ -58,7 +67,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch('http://localhost:3000/items/api/items')
+    fetch(this.nodehostname + '/items/api/items')
         .then(response => response.json(),
             reason => console.log(reason))
         .then(data => this.setState({model: data}))
