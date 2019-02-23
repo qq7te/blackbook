@@ -1,8 +1,8 @@
 
 
 const mongoStuff = require('./noidea.js');
-const url = 'mongodb://localhost:27017/listerine';
-
+// const url = 'mongodb://localhost:27017/listerine';
+const url = 'mongodb+srv://eljefe:6m21Agq0iN7L@amoeba-cnqbt.mongodb.net/listerine?retryWrites=true'
 
 mongoStuff.mongoose.connect(url, function (err, db) {
  if (err) {
@@ -45,7 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/', express.static('../build'));
+app.use('/', express.static('../bb/build'));
 app.use('/users', usersRouter);
 app.use('/items', itemsRouter);
 

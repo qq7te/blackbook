@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
       model: []
     };
-    this.nodehostname = 'http://localhost:3000';
+    this.nodehostname = '';//http://localhost:3000';
   }
 
 
