@@ -1,2 +1,3 @@
-web: node 'cd bb && npm install && npm run build && cd .. && node ./bin/www'
+web: run.sh 
+# node ./bin/www
 
