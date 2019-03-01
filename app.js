@@ -45,7 +45,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/', express.static('../bb/build'));
+app.use('/', express.static('./bb/build'));
 app.use('/users', usersRouter);
 app.use('/items', itemsRouter);
 
