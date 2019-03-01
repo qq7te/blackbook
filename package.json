@@ -3,7 +3,8 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cd bb && npm install && npm run build && cd .. && node ./bin/www"
+    "start": "node ./bin/www",
+    "heroku-prebuild": "./run.sh"
   },
   "engines": {
     "node": "10.3.0"
