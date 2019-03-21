@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 const axios = require('axios');
 
-class GuestBook extends Component {
+class ListEnterer extends Component {
     constructor(props) {
         super(props);
         this.handleName = this.handleName.bind(this);
-        // this.addToGuestBook = this.addToGuestBook.bind(this);
+        this.addToGuestBook = this.addToGuestBook.bind(this);
+        this.url = props.url;
 
         this.state = {
             nameOfItem: "",
@@ -17,6 +18,7 @@ class GuestBook extends Component {
         this.setState({nameOfItem: event.target.value});
     }
 
+    // all of this functionality should probably just go in the higher app
 
     addToGuestBook = (event) => {
         event.preventDefault();
@@ -31,7 +33,7 @@ class GuestBook extends Component {
             status: this.state.stateOfItem,
         };
 
-        axios.post('http://localhost:3000/items/api/items', oggetto)
+        axios.post(this.url + '/items/api/items', oggetto)
             .then(response => {
                 console.log(response, 'item added!');
             })
@@ -71,4 +73,4 @@ class GuestBook extends Component {
 
 }
 
-export default GuestBook;
+export default ListEnterer;

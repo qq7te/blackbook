@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import GuestBook from './ListEnterer';
+import ListEnterer from './ListEnterer';
 
 
 class Checkbox extends Component {
@@ -52,7 +52,7 @@ class App extends Component {
 
     return (
         <div className="App">
-          <GuestBook/>
+          <ListEnterer url={this.nodehostname}/>
           {
             some.map((listitem) =>
                 <div className={"listitem"}>
