@@ -35,3 +35,17 @@
 .listitem {
   text-align: left;
 }
+
+.deleteme {
+  float: right;
+}
+
+.lalista {
+  width: 300px;
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.checked {
+  margin-right: 15px;
+}

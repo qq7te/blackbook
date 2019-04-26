@@ -6,7 +6,7 @@ import ListEnterer from './ListEnterer';
 class Checkbox extends Component {
 
   render = () => (
-      <input type="checkbox" onClick={this.props.statusUpdater} checked={this.props.checked} />
+      <input className={"checked"} type="checkbox" onClick={this.props.statusUpdater} checked={this.props.checked} />
   );
 
 }
@@ -45,6 +45,25 @@ class App extends Component {
     )
   };
 
+  deleter = (id) => {
+      const url = this.nodehostname + "/items/api/items/" + id;
+      fetch(url, {
+          method: 'delete',
+          headers: {
+              'Content-Type': 'application/json'
+          },
+          // body: JSON.stringify({
+          //     'name': 'Darth Vader'
+          // })
+      })
+          .then(res => {
+              if (res.ok) return res.json()
+          })
+          .then(data => {
+              console.log(data)
+              window.location.reload()
+          })
+  };
 
   render = () => {
 
@@ -60,14 +79,17 @@ class App extends Component {
     return (
         <div className="App">
           <ListEnterer url={this.nodehostname}/>
+          <div className={"lalista"}>
           {
             some.sort(sortMissingFirst).map((listitem) =>
                 <div className={"listitem"}>
                   <Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span>
+                  <button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>
                 </div>)
           }
+          </div>
         </div>
     )
 

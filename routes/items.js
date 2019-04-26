@@ -59,5 +59,26 @@ router.put("/api/items/:id", (req, res) => {
         });
     });
 });
+// Delete a item with the specified id in the request
+router.delete("/api/items/:id", (req, res) => {
+    mongooseStuff.ItemsList.findByIdAndRemove(req.params.id)
+    .then(item => {
+        if(!item) {
+            return res.status(404).send({
+                message: "Item not found with id " + req.params.id
+            });
+        }
+        res.send({message: "Item deleted successfully!"});
+    }).catch(err => {
+        if(err.kind === 'ObjectId' || err.name === 'NotFound') {
+            return res.status(404).send({
+                message: "Item not found with id " + req.params.id
+            });
+        }
+        return res.status(500).send({
+            message: "Could not delete item with id " + req.params.id
+        });
+    });
+});
 
 module.exports = router;
