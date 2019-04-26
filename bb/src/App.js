@@ -48,13 +48,20 @@ class App extends Component {
 
   render = () => {
 
-    var some = this.state.model || [];
-
+      var some = this.state.model || [];
+      // this is where we filter and sort
+      var sortMissingFirst = (a, b) => {
+          if (a.status && !b.status) return 1;
+          if (!a.status && b.status) return -1;
+          if (a.name > b.name) return 1;
+          if (a.name < b.name) return -1;
+          return 0;
+      };
     return (
         <div className="App">
           <ListEnterer url={this.nodehostname}/>
           {
-            some.map((listitem) =>
+            some.sort(sortMissingFirst).map((listitem) =>
                 <div className={"listitem"}>
                   <Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
