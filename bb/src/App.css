@@ -49,6 +49,10 @@
   max-width: 300px;
 }
 
+.listitem:nth-child(odd) {
+  background-color: aliceblue;
+}
+
 .checked {
   margin-right: 15px;
 }
