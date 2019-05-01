@@ -83,9 +83,9 @@ class App extends Component {
           {
             some.sort(sortMissingFirst).map((listitem) =>
                 <div className={"listitem"}>
-                  <Checkbox checked={listitem.status}
+                    <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
-                  <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span>
+                  <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
                   <button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>
                 </div>)
           }
