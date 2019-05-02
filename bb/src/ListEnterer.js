@@ -49,21 +49,21 @@ class ListEnterer extends Component {
 
     render = () => {
         return (
-            <div>
-                <input
+            <div className="input-group">
+                <input type="text"
                     onChange={this.handleName}
                     name="nameOfItem"
-                    className="NameinputForm"
+                    className="form-control"
                     value={this.state.nameOfItem}
                     placeholder="Enter item name"
                 />
                 <button
-                    className="submitbuttonguestbook"
-                    type="submit"
+                    className="btn btn-outline"
+                    type="button"
                     onClick={this.addToGuestBook}
                 >
-                    Send it!
-                    <i className="GuestBookButton2" aria-hidden="true" />
+                    Add it!
+                    {/*<i className="GuestBookButton2" aria-hidden="true" />*/}
                 </button>
             </div>
         );

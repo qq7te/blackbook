@@ -18,7 +18,7 @@ class App extends Component {
     this.state = {
       model: []
     };
-    this.nodehostname = '';//http://localhost:3000';
+    this.nodehostname = 'http://localhost:5000';
   }
 
 
@@ -78,7 +78,9 @@ class App extends Component {
       };
     return (
         <div className="App">
+            <div className="collapse" id="collapseExample">
           <ListEnterer url={this.nodehostname}/>
+            </div>
           <div className={"lalista"}>
           {
             some.sort(sortMissingFirst).map((listitem) =>
@@ -86,7 +88,10 @@ class App extends Component {
                     <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
-                  <button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>
+                    <button type="button" onClick={this.deleter.bind(this, listitem._id)} className="close" aria-label="Close">
+  <span aria-hidden="true">&times;</span>
+</button>
+                  {/*<button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>*/}
                 </div>)
           }
           </div>
