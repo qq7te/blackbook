@@ -11,16 +11,40 @@ class Checkbox extends Component {
 
 }
 
+var sortMissingFirst = (a, b) => {
+    if (a.status && !b.status) return 1;
+    if (!a.status && b.status) return -1;
+    if (a.name > b.name) return 1;
+    if (a.name < b.name) return -1;
+    return 0;
+};
+
+var nofilter = (item) => true;
+var onlyMissing = (item) => !item.status;
+
+
+
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      model: []
-    };
-    this.nodehostname = 'http://localhost:5000';
-  }
+      model: [],
+        filter: nofilter
 
+    };
+    this.nodehostname = '';//http://localhost:5000';
+  };
+
+    toggleFilter= () => {
+        console.log("clcked");
+        var newfilter = nofilter;
+        if (this.state.filter === nofilter) {
+            newfilter = onlyMissing;
+
+}
+        this.setState({filter: newfilter});
+    };
 
   toggleItem = (id) => {
     this.setState(
@@ -52,9 +76,6 @@ class App extends Component {
           headers: {
               'Content-Type': 'application/json'
           },
-          // body: JSON.stringify({
-          //     'name': 'Darth Vader'
-          // })
       })
           .then(res => {
               if (res.ok) return res.json()
@@ -69,13 +90,8 @@ class App extends Component {
 
       var some = this.state.model || [];
       // this is where we filter and sort
-      var sortMissingFirst = (a, b) => {
-          if (a.status && !b.status) return 1;
-          if (!a.status && b.status) return -1;
-          if (a.name > b.name) return 1;
-          if (a.name < b.name) return -1;
-          return 0;
-      };
+      var processed = some.filter(this.state.filter).sort(sortMissingFirst);
+
     return (
         <div className="App">
             <div className="collapse" id="collapseExample">
@@ -83,7 +99,7 @@ class App extends Component {
             </div>
           <div className={"lalista"}>
           {
-            some.sort(sortMissingFirst).map((listitem) =>
+            processed.map((listitem) =>
                 <div className={"listitem"}>
                     <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
@@ -95,6 +111,22 @@ class App extends Component {
                 </div>)
           }
           </div>
+            <footer>
+                <div className="input-group">
+                    <div className="input-group-prepend">
+                        <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={this.toggleFilter}>Hide
+                        </button>
+                    </div>
+                    <input type="text" aria-label="lookup" placeholder="start typing to lookup..."
+                           className="form-control"/>
+                        <div className="input-group-append">
+                            <button className="btn btn-primary" type="button" data-toggle="collapse"
+                                    data-target="#collapseExample"
+                                    aria-expanded="false" aria-controls="collapseExample" id="hide-complete">+
+                            </button>
+                        </div>
+                </div>
+            </footer>
         </div>
     )
 

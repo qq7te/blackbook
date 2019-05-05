@@ -58,5 +58,7 @@
 }
 
 footer {
-  /*background-color: peachpuff;*/
+  position: absolute;
+  bottom: 20px;
+  width: 100%;
 }
