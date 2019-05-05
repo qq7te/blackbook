@@ -58,7 +58,13 @@
 }
 
 footer {
-  position: absolute;
-  bottom: 20px;
-  width: 100%;
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  bottom: 0;
+}
+
+#collapseExample {
+  position: -webkit-sticky; /* Safari */
+  position: sticky;
+  top: 0;
 }

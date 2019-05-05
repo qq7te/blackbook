@@ -95,7 +95,7 @@ class App extends Component {
     return (
         <div className="App">
             <div className="collapse" id="collapseExample">
-          <ListEnterer url={this.nodehostname}/>
+                <ListEnterer url={this.nodehostname}/>
             </div>
           <div className={"lalista"}>
           {
@@ -119,12 +119,12 @@ class App extends Component {
                     </div>
                     <input type="text" aria-label="lookup" placeholder="start typing to lookup..."
                            className="form-control"/>
-                        <div className="input-group-append">
-                            <button className="btn btn-primary" type="button" data-toggle="collapse"
-                                    data-target="#collapseExample"
-                                    aria-expanded="false" aria-controls="collapseExample" id="hide-complete">+
-                            </button>
-                        </div>
+                    <div className="input-group-append">
+                        <button className="btn btn-primary" type="button" data-toggle="collapse"
+                                data-target="#collapseExample"
+                                aria-expanded="false" aria-controls="collapseExample" id="hide-complete">+
+                        </button>
+                    </div>
                 </div>
             </footer>
         </div>
