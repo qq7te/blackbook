@@ -35,7 +35,7 @@ class App extends Component {
         filter: nofilter
 
     };
-    this.nodehostname = 'http://localhost:5000';
+    this.nodehostname = '';
   };
 
     toggleFilter= () => {
