@@ -36,6 +36,8 @@ class App extends Component {
 
     };
     this.nodehostname = '';
+    this.loadData = this.loadData.bind(this);
+
   };
 
     toggleFilter= () => {
@@ -83,8 +85,8 @@ class App extends Component {
               if (res.ok) return res.json()
           })
           .then(data => {
-              console.log(data)
-              window.location.reload()
+              console.log(data);
+              this.loadData();
           })
   };
 
@@ -97,7 +99,7 @@ class App extends Component {
     return (
         <div className="App">
             <div className="collapse" id="collapseExample">
-                <ListEnterer url={this.nodehostname}/>
+                <ListEnterer url={this.nodehostname} callback={this.loadData}/>
             </div>
           <div className={"lalista"}>
           {
@@ -106,9 +108,7 @@ class App extends Component {
                     <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
-                    <img width={40} src={x_button} onClick={this.deleter.bind(this, listitem._id)}/>
-
-                  {/*<button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>*/}
+                    <img width={40} src={x_button} onClick={this.deleter.bind(this, listitem._id)} alt={"delete"}/>
                 </div>)
           }
           </div>
@@ -137,15 +137,19 @@ class App extends Component {
 
   };
 
+  loadData() {
+      fetch(this.nodehostname + '/items/api/items')
+          .then(response => response.json(),
+              reason => console.log(reason))
+          .then(data => this.setState({model: data}))
+          .catch(e => {
+              console.log(e);
+              return e;
+          });
+  };
+
   componentDidMount() {
-    fetch(this.nodehostname + '/items/api/items')
-        .then(response => response.json(),
-            reason => console.log(reason))
-        .then(data => this.setState({model: data}))
-        .catch(e => {
-    console.log(e);
-    return e;
-  });
+      this.loadData();
   }
 }
 

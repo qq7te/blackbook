@@ -7,6 +7,7 @@ class ListEnterer extends Component {
         this.handleName = this.handleName.bind(this);
         this.addToGuestBook = this.addToGuestBook.bind(this);
         this.url = props.url;
+        this.callback = props.callback;
 
         this.state = {
             nameOfItem: "",
@@ -24,7 +25,7 @@ class ListEnterer extends Component {
         event.preventDefault();
         this.setState({
             nameOfItem: event.target.value,
-            stateOfItem: 'manca',
+            stateOfItem: false,
         });
 
         const nome = this.state.nameOfItem;
@@ -36,6 +37,7 @@ class ListEnterer extends Component {
         axios.post(this.url + '/items/api/items', oggetto)
             .then(response => {
                 console.log(response, 'item added!');
+                this.callback();
             })
             .catch(err => {
                 console.log(err, 'item not added, try again');
@@ -63,7 +65,6 @@ class ListEnterer extends Component {
                     onClick={this.addToGuestBook}
                 >
                     Add it!
-                    {/*<i className="GuestBookButton2" aria-hidden="true" />*/}
                 </button>
             </div>
         );
