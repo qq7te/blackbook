@@ -1,3 +1,8 @@
+@font-face {
+  font-family: humor-sans;
+  src: local(xkcd), url("fonts/xkcd.ttf") format('truetype');
+}
+
 .App {
   text-align: center;
 }
@@ -37,6 +42,7 @@
   align-items: center;
   justify-content: space-between;
   text-align: left;
+  font-family: "humor-sans", "Arial", serif;
 }
 
 .deleteme {
@@ -55,6 +61,12 @@
 
 .checked {
   margin-right: 15px;
+}
+
+.titolo {
+  font-family: humor-sans;
+  font-weight: bold;
+  text-align: center;
 }
 
 footer {
