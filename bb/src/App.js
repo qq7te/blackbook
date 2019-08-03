@@ -1,14 +1,16 @@
 import React, { Component } from 'react';
 import './App.css';
 import ListEnterer from './ListEnterer';
+import checkbox_outline from './checkbox-outline.png';
+import checkbox_filled from './checkbox-filled.png';
 
 
 class Checkbox extends Component {
 
   render = () => (
-      <input className={"checked"} type="checkbox" onClick={this.props.statusUpdater} checked={this.props.checked} />
-  );
 
+      <img width={40} src={this.props.checked ? checkbox_filled: checkbox_outline} onClick={this.props.statusUpdater} />
+  )
 }
 
 var sortMissingFirst = (a, b) => {
