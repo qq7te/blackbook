@@ -3,7 +3,7 @@ import './App.css';
 import ListEnterer from './ListEnterer';
 import checkbox_outline from './checkbox-outline.png';
 import checkbox_filled from './checkbox-filled.png';
-
+import x_button from './X.png';
 
 class Checkbox extends Component {
 
@@ -106,9 +106,8 @@ class App extends Component {
                     <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
-                    <button type="button" onClick={this.deleter.bind(this, listitem._id)} className="close" aria-label="Close">
-  <span aria-hidden="true">&times;</span>
-</button>
+                    <img width={40} src={x_button} onClick={this.deleter.bind(this, listitem._id)}/>
+
                   {/*<button className={"deleteme"} onClick={this.deleter.bind(this, listitem._id)}>x</button>*/}
                 </div>)
           }
