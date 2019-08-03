@@ -33,11 +33,11 @@ class App extends Component {
         filter: nofilter
 
     };
-    this.nodehostname = '';//http://localhost:5000';
+    this.nodehostname = 'http://localhost:5000';
   };
 
     toggleFilter= () => {
-        console.log("clcked");
+        console.log("clicked");
         var newfilter = nofilter;
         if (this.state.filter === nofilter) {
             newfilter = onlyMissing;
@@ -114,7 +114,11 @@ class App extends Component {
             <footer>
                 <div className="input-group">
                     <div className="input-group-prepend">
-                        <button className="btn btn-outline-secondary" type="button" id="button-addon1" onClick={this.toggleFilter}>Hide
+                        <button className="btn btn-outline-secondary"
+                                type="button"
+                                id="button-addon1"
+                                onClick={this.toggleFilter}>
+                            {this.state.filter === nofilter ? "Hide" : "Show"}
                         </button>
                     </div>
                     <input type="text" aria-label="lookup" placeholder="start typing to lookup..."
