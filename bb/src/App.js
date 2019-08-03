@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import ListEnterer from './ListEnterer';
-import checkbox_outline from './checkbox-outline.png';
-import checkbox_filled from './checkbox-filled.png';
+import checkbox_outline from './images/checkbox-outline.png';
+import checkbox_filled from './images/checkbox-filled.png';
 import x_button from './X.png';
 
 class Checkbox extends Component {
