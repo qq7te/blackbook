@@ -5,19 +5,37 @@ import checkbox_outline from './images/checkbox-outline.png';
 import checkbox_filled from './images/checkbox-filled.png';
 import x_button from './X.png';
 
+// returns the first ASCII character in the string.
+function findFirstChar(str) {
+    let count = 0;
+    for (const c of str) {
+        if (c >= 'a' && c <= 'z') {
+            return c + "";
+        } else count++;
+    }
+    return count;
+}
+
 class Checkbox extends Component {
 
   render = () => (
 
-      <img width={40} src={this.props.checked ? checkbox_filled: checkbox_outline} onClick={this.props.statusUpdater} />
+      <img alt={this.props.checked ? "checked" : "unchecked"} width={40} src={this.props.checked ? checkbox_filled: checkbox_outline} onClick={this.props.statusUpdater} />
   )
 }
 
 var sortMissingFirst = (a, b) => {
     if (a.status && !b.status) return 1;
     if (!a.status && b.status) return -1;
-    if (a.name > b.name) return 1;
-    if (a.name < b.name) return -1;
+    // make lowercase
+    const la = a.name.toLowerCase();
+    const lb = b.name.toLowerCase();
+    // take out all non-ascii letters at the beginning
+    const comp_a = la.substring(la.indexOf(findFirstChar(la)));
+    const comp_b = lb.substring(lb.indexOf(findFirstChar(lb)));
+    // compare lexicographically 
+    if (comp_a > comp_b) return 1;
+    if (comp_a < comp_b) return -1;
     return 0;
 };
 
@@ -104,7 +122,7 @@ class App extends Component {
           <div className={"lalista"}>
           {
             processed.map((listitem) =>
-                <div className={"listitem"}>
+                <div className={"listitem"} key={listitem._id}>
                     <span><Checkbox checked={listitem.status}
                             statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
