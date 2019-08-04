@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
+
 const axios = require('axios');
 
 class ListEnterer extends Component {
@@ -53,11 +54,11 @@ class ListEnterer extends Component {
         return (
             <div className="input-group">
                 <input type="text"
-                    onChange={this.handleName}
-                    name="nameOfItem"
-                    className="form-control"
-                    value={this.state.nameOfItem}
-                    placeholder="Enter item name"
+                       onChange={this.handleName}
+                       name="nameOfItem"
+                       className="form-control"
+                       value={this.state.nameOfItem}
+                       placeholder="Enter item name"
                 />
                 <button
                     className="btn btn-outline"
@@ -69,7 +70,6 @@ class ListEnterer extends Component {
             </div>
         );
     }
-
 
 
 }
