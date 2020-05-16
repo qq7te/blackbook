@@ -74,7 +74,7 @@ class App extends Component {
                 const newmodel =
                     state.model.map(item => {
                         if (item._id === id)
-                            return {_id: item._id, name: item.name, status: !item.status};
+                            return { ...item, status: !item.status};
                         return item;
                     });
                 const url = this.nodehostname + "/items/api/items/" + id;
