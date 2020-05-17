@@ -5,6 +5,15 @@ import checkbox_outline from './images/checkbox-outline.png';
 import checkbox_filled from './images/checkbox-filled.png';
 import x_button from './X.png';
 
+const axios = require('axios');
+
+const DisplayMode = {
+    SHOW_ALL: {filter: (item) => true, name: "Show"},
+    HIDE_COMPLETED: {filter: (item) => !item.status, name: "Hide"},
+    SEARCHING: {}
+}
+
+
 // returns the first ASCII character in the string.
 function findFirstChar(str) {
     let count = 0;
@@ -50,8 +59,10 @@ class App extends Component {
         super(props);
         this.state = {
             model: [],
-            filter: nofilter
-
+            filter: nofilter,
+            currentDisplayMode: DisplayMode.SHOW_ALL,
+            previousDisplayMode: DisplayMode.HIDE_COMPLETED,
+            searchText: ""
         };
         this.nodehostname = '';
         this.loadData = this.loadData.bind(this);
@@ -59,14 +70,28 @@ class App extends Component {
     };
 
     toggleFilter = () => {
-        console.log("clicked");
-        var newfilter = nofilter;
-        if (this.state.filter === nofilter) {
-            newfilter = onlyMissing;
-
-        }
-        this.setState({filter: newfilter});
+        this.setState(
+            {filter: this.state.previousDisplayMode.filter,
+                previousDisplayMode: this.state.currentDisplayMode,
+                currentDisplayMode: this.state.previousDisplayMode
+            });
     };
+
+    updateFilters = (text_temp) => {
+        const text = text_temp.trim();
+        let nextfilter = {};
+
+        if (text.length === 0) {
+            nextfilter = this.state.currentDisplayMode.filter;
+        }
+        else {
+            nextfilter = item => item.name.toLowerCase().includes(text.toLowerCase());
+        }
+        this.setState({
+            filter: nextfilter,
+            searchText: text.toLowerCase()
+        });
+}
 
     toggleItem = (id) => {
         this.setState(
@@ -108,6 +133,46 @@ class App extends Component {
             })
     };
 
+    handlePlusButton = (event) => {
+        const newname = this.state.searchText;
+        console.log("adding " + newname + " to " + this.nodehostname);
+        this.adder(newname);
+        this.updateFilters("");
+        event.target.value = "";
+    }
+
+    adder = (newname) => {
+        this.setState({
+            nameOfItem: newname,
+            stateOfItem: false,
+        });
+
+        const nome = this.state.nameOfItem;
+        const oggetto = {
+            name: nome,
+            status: this.state.stateOfItem,
+        };
+
+        axios.post(this.nodehostname + '/items/api/items', oggetto)
+            .then(response => {
+                console.log(response, 'item added!');
+                this.callback();
+            })
+            .catch(err => {
+                console.log(err, 'item not added, try again');
+            });
+
+        this.setState({
+            SignatureOfGuest: "",
+            MessageofGuest: "",
+        });
+    };
+
+    updateList = (event) => {
+        this.updateFilters(event.target.value);
+    };
+
+
     render = () => {
 
         var some = this.state.model || [];
@@ -138,15 +203,20 @@ class App extends Component {
                                     type="button"
                                     id="button-addon1"
                                     onClick={this.toggleFilter}>
-                                {this.state.filter === nofilter ? "Hide" : "Show"}
+                                {this.state.previousDisplayMode.name}
                             </button>
                         </div>
-                        <input type="text" aria-label="lookup" placeholder="start typing to lookup..."
-                               className="form-control"/>
+                        <input id="lookup-box"
+                               type="text"
+                               placeholder="start typing to lookup..."
+                               className="form-control"
+                               onChange={this.updateList}/>
                         <div className="input-group-append">
-                            <button className="btn btn-primary" type="button" data-toggle="collapse"
-                                    data-target="#collapseExample"
-                                    aria-expanded="false" aria-controls="collapseExample" id="hide-complete">+
+                            <button className="btn btn-primary" type="button"
+
+                                    onClick={this.handlePlusButton}
+                                    // aria-expanded="false" aria-controls="collapseExample"
+                                    id="hide-complete">+
                             </button>
                         </div>
                     </div>
