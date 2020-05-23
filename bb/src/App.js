@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-import ListEnterer from './ListEnterer';
 import checkbox_outline from './images/checkbox-outline.png';
 import checkbox_filled from './images/checkbox-filled.png';
 import x_button from './X.png';
@@ -50,8 +49,6 @@ var sortMissingFirst = (a, b) => {
 };
 
 var nofilter = (item) => true;
-var onlyMissing = (item) => !item.status;
-
 
 class App extends Component {
 
@@ -128,44 +125,41 @@ class App extends Component {
                 if (res.ok) return res.json()
             })
             .then(data => {
-                console.log(data);
+                console.log(data, 'item deleted!');
                 this.loadData();
             })
     };
 
     handlePlusButton = (event) => {
         const newname = this.state.searchText;
-        console.log("adding " + newname + " to " + this.nodehostname);
+        // adding to the database
         this.adder(newname);
+        // reloading to be sure
+        this.loadData();
+        // resetting the lookup-box
+        document.getElementById("lookup-box").value = "";
         this.updateFilters("");
-        event.target.value = "";
     }
 
-    adder = (newname) => {
-        this.setState({
-            nameOfItem: newname,
-            stateOfItem: false,
-        });
-
-        const nome = this.state.nameOfItem;
+    adder = (inputname) => {
+        const newname = inputname.trim();
+        if (newname.length === 0) {
+            console.log("empty name... ignoring");
+            return;
+        }
+        console.log("adding " + newname + " to " + this.nodehostname);
         const oggetto = {
-            name: nome,
-            status: this.state.stateOfItem,
+            name: newname,
+            status: false,
         };
-
         axios.post(this.nodehostname + '/items/api/items', oggetto)
             .then(response => {
                 console.log(response, 'item added!');
-                this.callback();
+                // this.callback();
             })
             .catch(err => {
                 console.log(err, 'item not added, try again');
             });
-
-        this.setState({
-            SignatureOfGuest: "",
-            MessageofGuest: "",
-        });
     };
 
     updateList = (event) => {
@@ -181,9 +175,6 @@ class App extends Component {
 
         return (
             <div className="App">
-                <div className="collapse" id="collapseExample">
-                    <ListEnterer url={this.nodehostname} callback={this.loadData}/>
-                </div>
                 <div className={"lalista"}>
                     {
                         processed.map((listitem) =>
@@ -196,7 +187,7 @@ class App extends Component {
                             </div>)
                     }
                 </div>
-                <footer>
+                <div className="footer">
                     <div className="input-group">
                         <div className="input-group-prepend">
                             <button className="btn btn-outline-secondary"
@@ -206,31 +197,27 @@ class App extends Component {
                                 {this.state.previousDisplayMode.name}
                             </button>
                         </div>
-                        <input id="lookup-box"
+                        <input autoFocus id="lookup-box"
                                type="text"
                                placeholder="start typing to lookup..."
                                className="form-control"
                                onChange={this.updateList}/>
                         <div className="input-group-append">
                             <button className="btn btn-primary" type="button"
-
-                                    onClick={this.handlePlusButton}
-                                    // aria-expanded="false" aria-controls="collapseExample"
-                                    id="hide-complete">+
+                                    onClick={this.handlePlusButton}>+
                             </button>
                         </div>
                     </div>
-                </footer>
+                </div>
             </div>
         )
-
     };
 
     loadData() {
         fetch(this.nodehostname + '/items/api/items')
             .then(response => response.json(),
                 reason => console.log(reason))
-            .then(data => this.setState({model: data}))
+            .then(data => { console.log("setting state") ; this.setState({model: data});})
             .catch(e => {
                 console.log(e);
                 return e;
