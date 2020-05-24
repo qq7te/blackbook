@@ -91,26 +91,9 @@ class App extends Component {
 }
 
     toggleItem = (id) => {
-        this.setState(
-            state => {
-                const newmodel =
-                    state.model.map(item => {
-                        if (item._id === id)
-                            return { ...item, status: !item.status};
-                        return item;
-                    });
-                const url = this.nodehostname + "/items/api/items/" + id;
-                const [newitem] = newmodel.filter(item => item._id === id);
-                fetch(url, {
-                    headers: {"content-type": "application/json; charset=UTF-8"},
-                    body: JSON.stringify(newitem),
-                    method: "PUT"
-                }).then(res => console.log(res))
-                    .catch(error => console.log(error));
-
-                return {model: newmodel};
-            }
-        )
+        this.update_local_and_remote(
+            item => item._id === id,  // modify if it matches the id
+            item => { return {status: !item.status};}); // modify by flipping status
     };
 
     deleter = (id) => {
@@ -139,49 +122,72 @@ class App extends Component {
         this.updateFilters("");
     }
 
-    adder = (inputname) => {
+    add_remote = (item, success, failure) => {
+        axios.post(this.nodehostname + '/items/api/items', item)
+            .then(response => {
+                console.log(response, "added item " + response.data.name + " with id " + response.data._id);
+                success && success(response);
+            })
+            .catch(err => {
+                console.log(err, 'item not added, try again');
+                failure && failure(err);
+            });
+    }
+
+    update_remote = (id, modifier, success, failure) => {
+        axios.put(this.nodehostname + '/items/api/items/' + id, modifier)
+            .then(response => {
+                console.log(response, "udated item " + response.data.name + " with id " + response.data._id + " with change: " + JSON.stringify(modifier) );
+                success && success(response);
+            })
+            .catch(err => {
+                console.log(err, 'item not modified, try again');
+                failure && failure(err);
+            });
+    }
+
+    update_local_and_remote = (item_predicate, item_modifier) => {
+        this.setState(
+            state => {
+                const newmodel =
+                    this.state.model.map(item => {
+                        if (item_predicate(item)) {
+                            const update = item_modifier(item);
+                            this.update_remote(item._id, update);
+                            return {...item, ...update};
+                        }
+                        return item;
+                    });
+
+                return {model: newmodel};
+            });
+    }
+
+    adder = inputname => {
         const newname = inputname.trim();
         if (newname.length === 0) {
             console.log("empty name... ignoring");
             return;
         }
-        console.log("adding " + newname + " to " + this.nodehostname);
         const oggetto = {
             name: newname,
             status: false,
         };
-        axios.post(this.nodehostname + '/items/api/items', oggetto)
-            .then(response => {
-                console.log(response, 'item added!');
+        this.add_remote(oggetto,
+            (response) => {
+                // we reload the data so that we do have an id for the new item
+                // otherwise we'd have no way of modifying its state later
                 this.loadData();
-            })
-            .catch(err => {
-                console.log(err, 'item not added, try again');
             });
     };
 
     handleTyping = (event) => {
         const enteredText = event.target.value;
-        if (enteredText.length > 1 && enteredText.slice(-1) === '.') {
-            const goodPart = enteredText.slice(0, -1).toLowerCase();
-            const nuovaLista = this.state.model.map(item => {
-                const specialFilter = item => item.name.toLowerCase().includes(goodPart)
-                if (specialFilter(item)) {
-                    const modified = {...item, status: false};
-                    const url = this.nodehostname + "/items/api/items/" + modified._id;
-                    fetch(url, {
-                        headers: {"content-type": "application/json; charset=UTF-8"},
-                        body: JSON.stringify(modified),
-                        method: "PUT"
-                    }).then(res => console.log(res))
-                        .catch(error => console.log(error));
-                    return modified;
-                }
-                else {
-                    return item;
-                }
-            });
-            this.setState({model : nuovaLista});
+        let dotInSearchBar = enteredText.length > 1 && enteredText.slice(-1) === '.';
+        if (dotInSearchBar) {
+            const beforeTheDot = enteredText.slice(0, -1).toLowerCase();
+            const matches_entered_name = item => item.name.toLowerCase().includes(beforeTheDot)
+            this.update_local_and_remote(matches_entered_name, item => {return {status: false};});
             this.updateFilters("");
             event.target.value = "";
         } else {
