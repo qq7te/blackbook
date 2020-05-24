@@ -134,8 +134,6 @@ class App extends Component {
         const newname = this.state.searchText;
         // adding to the database
         this.adder(newname);
-        // reloading to be sure
-        this.loadData();
         // resetting the lookup-box
         document.getElementById("lookup-box").value = "";
         this.updateFilters("");
@@ -155,7 +153,7 @@ class App extends Component {
         axios.post(this.nodehostname + '/items/api/items', oggetto)
             .then(response => {
                 console.log(response, 'item added!');
-                // this.callback();
+                this.loadData();
             })
             .catch(err => {
                 console.log(err, 'item not added, try again');
