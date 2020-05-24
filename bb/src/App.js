@@ -160,8 +160,33 @@ class App extends Component {
             });
     };
 
-    updateList = (event) => {
-        this.updateFilters(event.target.value);
+    handleTyping = (event) => {
+        const enteredText = event.target.value;
+        if (enteredText.length > 1 && enteredText.slice(-1) === '.') {
+            const goodPart = enteredText.slice(0, -1).toLowerCase();
+            const nuovaLista = this.state.model.map(item => {
+                const specialFilter = item => item.name.toLowerCase().includes(goodPart)
+                if (specialFilter(item)) {
+                    const modified = {...item, status: false};
+                    const url = this.nodehostname + "/items/api/items/" + modified._id;
+                    fetch(url, {
+                        headers: {"content-type": "application/json; charset=UTF-8"},
+                        body: JSON.stringify(modified),
+                        method: "PUT"
+                    }).then(res => console.log(res))
+                        .catch(error => console.log(error));
+                    return modified;
+                }
+                else {
+                    return item;
+                }
+            });
+            this.setState({model : nuovaLista});
+            this.updateFilters("");
+            event.target.value = "";
+        } else {
+            this.updateFilters(enteredText);
+        }
     };
 
 
@@ -199,7 +224,7 @@ class App extends Component {
                                type="text"
                                placeholder="start typing to lookup..."
                                className="form-control"
-                               onChange={this.updateList}/>
+                               onChange={this.handleTyping}/>
                         <div className="input-group-append">
                             <button className="btn btn-primary" type="button"
                                     onClick={this.handlePlusButton}>+
