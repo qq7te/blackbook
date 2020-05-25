@@ -7,7 +7,7 @@
     "heroku-prebuild": "./run.sh"
   },
   "engines": {
-    "node": "10.3.0"
+    "node": "10.20.1"
   },
   "dependencies": {
     "mongoose": "^5.7.5",
@@ -16,6 +16,7 @@
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "cors": "^2.8.5"
   }
 }
