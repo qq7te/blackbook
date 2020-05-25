@@ -227,7 +227,7 @@ class App extends Component {
                             </button>
                         </div>
                         <input autoFocus id="lookup-box"
-                               type="text"
+                               type="search"
                                placeholder="start typing to lookup..."
                                className="form-control"
                                onChange={this.handleTyping}/>
