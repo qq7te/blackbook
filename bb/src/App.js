@@ -254,7 +254,13 @@ class App extends Component {
     };
 
     componentDidMount() {
-        this.loadData();
+        // setup polling at regular intervals
+        var sleep = time => new Promise(resolve => setTimeout(resolve, time))
+        var poll = (promiseFn, time) => promiseFn().then(
+            sleep(time).then(() => poll(promiseFn, time)))
+
+
+        poll(() => new Promise(() => this.loadData()), 30000)
     }
 }
 
