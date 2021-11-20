@@ -49,6 +49,7 @@ var sortMissingFirst = (a, b) => {
 };
 
 var nofilter = (item) => true;
+var whereami = 0;
 
 class App extends Component {
 
@@ -88,12 +89,21 @@ class App extends Component {
             filter: nextfilter,
             searchText: text.toLowerCase()
         });
-}
+    };
 
     toggleItem = (id) => {
+        var page_y = window.pageYOffset;
+        const thisone = document.getElementById(id);
+        // console.log("page is at " + page_y);
+        thisone.blur();
         this.update_local_and_remote(
             item => item._id === id,  // modify if it matches the id
             item => { return {status: !item.status};}); // modify by flipping status
+        // console.log("recentering on " + thisone.getAttribute('name'))
+        window.scrollTo( 0, page_y);
+        // console.log("but now it's at " + window.pageYOffset);
+        whereami = page_y;
+        // return page_y;
     };
 
     deleter = (id) => {
@@ -206,8 +216,8 @@ class App extends Component {
             <div className="App">
                 <div className={"lalista"}>
                     {
-                        processed.map((listitem) =>
-                            <div className={"listitem"} key={listitem._id}>
+                        processed.map((listitem, i, array) =>
+                            <div className={"listitem"} key={listitem._id} id={listitem._id} name={listitem.name}>
                     <span><Checkbox checked={listitem.status}
                                     statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
@@ -246,7 +256,10 @@ class App extends Component {
         fetch(this.nodehostname + '/items/api/items')
             .then(response => response.json(),
                 reason => console.log(reason))
-            .then(data => { console.log("setting state") ; this.setState({model: data});})
+            .then(data => {
+                whereami = window.pageYOffset;
+                this.setState({model: data});
+            })
             .catch(e => {
                 console.log(e);
                 return e;
@@ -261,7 +274,14 @@ class App extends Component {
 
 
         poll(() => new Promise(() => this.loadData()), 30000)
-    }
+    };
+
+    componentDidUpdate() {
+        // console.log('update me ');
+        // console.log("scrolling to " + whereami);
+        window.scrollTo(0, whereami);
+        // console.log(document.activeElement);
+    };
 }
 
 export default App;
