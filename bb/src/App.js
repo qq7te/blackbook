@@ -49,7 +49,11 @@ var sortMissingFirst = (a, b) => {
 };
 
 var nofilter = (item) => true;
-var whereami = 0;
+
+// this silly little variable is used to keep track of the window Y scroll
+// so that we can force the browser at that scroll point to prevent it from scrolling
+// when we de-select an item
+var window_Y_scroll = 0;
 
 class App extends Component {
 
@@ -93,17 +97,11 @@ class App extends Component {
 
     toggleItem = (id) => {
         var page_y = window.pageYOffset;
-        const thisone = document.getElementById(id);
-        // console.log("page is at " + page_y);
-        thisone.blur();
         this.update_local_and_remote(
             item => item._id === id,  // modify if it matches the id
             item => { return {status: !item.status};}); // modify by flipping status
-        // console.log("recentering on " + thisone.getAttribute('name'))
         window.scrollTo( 0, page_y);
-        // console.log("but now it's at " + window.pageYOffset);
-        whereami = page_y;
-        // return page_y;
+        window_Y_scroll = page_y;
     };
 
     deleter = (id) => {
@@ -164,6 +162,9 @@ class App extends Component {
                         if (item_predicate(item)) {
                             const update = item_modifier(item);
                             this.update_remote(item._id, update);
+                            // the following line returns a new object
+                            // with a copy of the item's properties and a one more set of properties
+                            // from update which may override the previous ones, resulting in an update object
                             return {...item, ...update};
                         }
                         return item;
@@ -216,8 +217,8 @@ class App extends Component {
             <div className="App">
                 <div className={"lalista"}>
                     {
-                        processed.map((listitem, i, array) =>
-                            <div className={"listitem"} key={listitem._id} id={listitem._id} name={listitem.name}>
+                        processed.map((listitem) =>
+                            <div className={"listitem"} key={listitem._id} id={listitem._id}>
                     <span><Checkbox checked={listitem.status}
                                     statusUpdater={this.toggleItem.bind(this, listitem._id)}/>
                   <span className={listitem.status ? "abbiamo" : "manca"}>{listitem.name}</span></span>
@@ -257,7 +258,7 @@ class App extends Component {
             .then(response => response.json(),
                 reason => console.log(reason))
             .then(data => {
-                whereami = window.pageYOffset;
+                window_Y_scroll = window.pageYOffset;
                 this.setState({model: data});
             })
             .catch(e => {
@@ -277,10 +278,7 @@ class App extends Component {
     };
 
     componentDidUpdate() {
-        // console.log('update me ');
-        // console.log("scrolling to " + whereami);
-        window.scrollTo(0, whereami);
-        // console.log(document.activeElement);
+        window.scrollTo(0, window_Y_scroll);
     };
 }
 
