@@ -7,12 +7,12 @@
     "heroku-prebuild": "./run.sh"
   },
   "engines": {
-    "node": "10.20.1"
+    "node": ">=16.17.1"
   },
   "dependencies": {
-    "mongoose": "^5.7.5",
+    "mongoose": "^6.10.0",
     "cookie-parser": "~1.4.3",
-    "debug": "~2.6.9",
+    "debug": "~4.3.4",
     "express": "~4.16.0",
     "http-errors": "~1.6.2",
     "morgan": "~1.9.0",
