@@ -5,15 +5,15 @@ services:
     ports:
             - "5555:5000"
     environment:
-            LETSENCRYPT_MAIL: 'eff@qq7te.com'
-            VIRTUAL_HOST: 'bellalista.qq7te.com'
-            LETSENCRYPT_HOST: 'bellalista.qq7te.com'
+            LETSENCRYPT_MAIL: ${LETSENCRYPT_MAIL}
+            VIRTUAL_HOST: ${VIRTUAL_HOST}
+            LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
     networks: 
       - webproxy
 
 networks:
   webproxy:
-    name: 'webproxy'
+    name: ${NETWORK_NAME}
     external: true
 
 
