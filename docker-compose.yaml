@@ -3,5 +3,17 @@ services:
   bellalista:
     build: .
     ports:
-      - "5000:5000"
+            - "5555:5000"
+    environment:
+            LETSENCRYPT_MAIL: 'eff@qq7te.com'
+            VIRTUAL_HOST: 'bellalista.qq7te.com'
+            LETSENCRYPT_HOST: 'bellalista.qq7te.com'
+    networks: 
+      - webproxy
+
+networks:
+  webproxy:
+    name: 'webproxy'
+    external: true
+
 
