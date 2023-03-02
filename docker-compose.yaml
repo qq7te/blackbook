@@ -10,6 +10,7 @@ services:
             LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
     networks: 
       - webproxy
+    restart: unless-stopped
 
 networks:
   webproxy:
