@@ -1,8 +1,15 @@
-
+// Load environment variables from .env file
+require('dotenv').config();
 
 const mongoStuff = require('./noidea.js');
-// const url = 'mongodb://localhost:27017/listerine';
-const url = 'mongodb+srv://eljefe:6m21Agq0iN7L@amoeba-cnqbt.mongodb.net/listerine?retryWrites=true'
+
+if (!process.env.MONGODB_URI) {
+  console.error('ERROR: MONGODB_URI environment variable is not set!');
+  console.error('Please set MONGODB_URI before starting the application.');
+  process.exit(1);
+}
+
+const url = process.env.MONGODB_URI;
 
 mongoStuff.mongoose.connect(url, function (err, db) {
  if (err) {

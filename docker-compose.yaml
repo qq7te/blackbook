@@ -5,6 +5,7 @@ services:
     ports:
             - "5555:5000"
     environment:
+            MONGODB_URI: ${MONGODB_URI}
             LETSENCRYPT_MAIL: ${LETSENCRYPT_MAIL}
             VIRTUAL_HOST: ${VIRTUAL_HOST}
             LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
