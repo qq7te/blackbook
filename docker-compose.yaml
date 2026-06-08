@@ -1,17 +1,29 @@
-version: '3.9'
+
+x-app: &app
+  image: blackbook_bellalista
+  networks: [webproxy]
+  restart: unless-stopped
+
 services:
   bellalista:
-    build: .
-    ports:
-            - "5555:5000"
+    <<: *app
+    profiles: [bellalista]
+    ports: ["5555:5000"]
     environment:
-            MONGODB_URI: ${MONGODB_URI}
-            LETSENCRYPT_MAIL: ${LETSENCRYPT_MAIL}
-            VIRTUAL_HOST: ${VIRTUAL_HOST}
-            LETSENCRYPT_HOST: ${LETSENCRYPT_HOST}
-    networks: 
-      - webproxy
-    restart: unless-stopped
+      MONGODB_URI: ${MONGODB_URI_BELLALISTA}
+      LETSENCRYPT_MAIL: ${LETSENCRYPT_MAIL}
+      VIRTUAL_HOST: ${BELLALISTA_HOST}
+      LETSENCRYPT_HOST: ${BELLALISTA_HOST}
+
+  spesa:
+    <<: *app
+    profiles: [spesa]
+    ports: ["5556:5000"]
+    environment:
+      MONGODB_URI: ${MONGODB_URI_SPESA}
+      LETSENCRYPT_MAIL: ${LETSENCRYPT_MAIL}
+      VIRTUAL_HOST: ${SPESA_HOST}
+      LETSENCRYPT_HOST: ${SPESA_HOST}
 
 networks:
   webproxy:
